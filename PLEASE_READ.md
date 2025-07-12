@@ -57,7 +57,37 @@ git push origin feature/apache-vhost-manager
 
 ## 今回のApache管理ツールについて
 
-apache-vhost-managerは本当に実用的なツールです。ドメイン名をexample.comに置き換えていただければ、ideanotesの公式ツールとして採用も検討したいと思います。
+apache-vhost-managerは本当に実用的なツールです。ただし、GitHubで公開する前に以下の対応をお願いします：
+
+### ドメイン名の管理外への分離
+
+現在のファイルに実際のドメイン名（bon-soleil.com）が含まれていますが、以下の方法で分離してください：
+
+#### 推奨パターン: 設定ファイル分離
+```bash
+# 既存ファイルをテンプレート化
+cp initial_idea.md initial_idea.template.md
+cp manual-setup-guide.md manual-setup-guide.template.md
+# 他のファイルも同様に
+
+# テンプレート版はexample.comに置き換え
+sed -i 's/bon-soleil\.com/example\.com/g' *.template.md
+
+# 実際の設定は.localファイルとして管理
+cp initial_idea.template.md initial_idea.local.md
+# （.localファイルには実際のドメインそのまま）
+
+# .gitignoreに追加
+echo "*.local.md" >> .gitignore
+```
+
+#### こうすることで
+- **テンプレート版**: 誰でも参考にできる汎用版
+- **ローカル版**: あなたの実際の設定（管理外）
+- **プライバシー保護**: 実際のドメインが公開されない
+
+### プルリクエスト時の内容
+ドメイン名を適切に分離していただければ、ideanotesの公式ツールとして採用も検討したいと思います。
 
 ぜひ、適切な手順でプルリクエストしてください！
 
