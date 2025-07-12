@@ -5,7 +5,7 @@
 ## 🎯 現在の課題と機会
 
 ### 現状の設定
-- `dev2.bon-soleil.com` に全てが集約
+- `dev.example.com` に全てが集約
 - `/develop` エイリアスで開発ディレクトリを公開
 - 複数プロジェクトが同一ドメイン下で混在
 
@@ -16,22 +16,22 @@
 
 ### 想定パターン
 ```
-ideanotes.bon-soleil.com     → ideanotesプロジェクト
-jsontools.bon-soleil.com    → jsontoolsプロジェクト  
-x-auto-repost.bon-soleil.com → x-auto-repostプロジェクト
-tools.bon-soleil.com        → 開発ツール集（汎用）
+project1.example.com     → project1
+myapp.example.com       → myappプロジェクト  
+project2.example.com    → project2プロジェクト
+tools.example.com       → 開発ツール集（汎用）
 ```
 
 ### DNS設定
 - 各サブドメインを同一EIPに向ける
-- ワイルドカード設定も可能: `*.bon-soleil.com`
+- ワイルドカード設定も可能: `*.example.com`
 
 ## 📋 vhost管理ツールへの反映
 
 ### 機能拡張
 1. **サブドメイン自動生成**
    - プロジェクト名からサブドメイン提案
-   - `{project}.bon-soleil.com` パターン
+   - `{project}.example.com` パターン
 
 2. **プロジェクト別設定**
    - DocumentRoot: `/var/www/html/{subdomain}`
@@ -45,8 +45,8 @@ tools.bon-soleil.com        → 開発ツール集（汎用）
 ### テンプレート修正
 ```apache
 <VirtualHost *:443>
-    ServerName {project}.bon-soleil.com
-    DocumentRoot /var/www/html/{project}.bon-soleil.com
+    ServerName {project}.example.com
+    DocumentRoot /var/www/html/{project}.example.com
     
     # 開発用アクセス（移行期間用）
     Alias /develop /home/ec2-user/develop/{project}
@@ -57,7 +57,7 @@ tools.bon-soleil.com        → 開発ツール集（汎用）
     </Directory>
     
     # 本番用設定
-    <Directory "/var/www/html/{project}.bon-soleil.com">
+    <Directory "/var/www/html/{project}.example.com">
         Options -Indexes
         AllowOverride All
         Require all granted
@@ -74,8 +74,8 @@ tools.bon-soleil.com        → 開発ツール集（汎用）
 ./create-vhost.sh ideanotes
 
 # 生成される設定
-# - ideanotes.bon-soleil.com
-# - DocumentRoot: /var/www/html/ideanotes.bon-soleil.com
+# - ideanotes.example.com
+# - DocumentRoot: /var/www/html/ideanotes.example.com
 # - 開発Alias: /develop → /home/ec2-user/develop/ideanotes
 ```
 

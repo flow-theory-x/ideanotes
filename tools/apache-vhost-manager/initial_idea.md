@@ -33,22 +33,22 @@ EC2環境でApacheが稼働中、vhostで複数のサービスを公開予定。
 
 ### Apache環境
 - ✅ Apache httpd稼働中 (ポート80,443)
-- ✅ 既存vhost: `dev2.bon-soleil.com` 
+- ✅ 既存vhost: `dev.example.com` 
 - ✅ SSL証明書導入済み (Let's Encrypt)
 - 📁 設定ファイル: `/etc/httpd/conf.d/`
 
 ### 現在の設定パターン
 ```
 /etc/httpd/conf.d/
-├── dev2.bon-soleil.com.conf (HTTP→HTTPS redirect)
-└── dev2.bon-soleil.com-le-ssl.conf (HTTPS設定)
+├── dev.example.com.conf (HTTP→HTTPS redirect)
+└── dev.example.com-le-ssl.conf (HTTPS設定)
 ```
 
 ### 現在の運用状況
-- **メインアプリ**: `/var/www/html/dev2.bon-soleil.com` (SPA)
+- **メインアプリ**: `/var/www/html/dev.example.com` (SPA)
 - **開発ディレクトリ**: `/develop` エイリアス → `/home/ec2-user/develop`
 - **API プロキシ**: AWS API Gateway連携
-- **プロジェクト例**: ideanotes, jsontools, x-auto-repost等
+- **プロジェクト例**: project1, project2, project3等
 
 ### サブドメイン運用の可能性
 - 同一EIPに複数サブドメイン向け可能

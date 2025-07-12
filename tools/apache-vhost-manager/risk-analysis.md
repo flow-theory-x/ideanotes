@@ -6,20 +6,20 @@
 
 ### 新規作成するもの
 1. **新規ディレクトリ**
-   - `/var/www/html/jsontools.bon-soleil.com/` (シンボリックリンク)
-   - `/home/ec2-user/production/jsontools/` (Git clone)
+   - `/var/www/html/myapp.example.com/` (シンボリックリンク)
+   - `/home/ec2-user/production/myapp/` (Git clone)
 
 2. **新規設定ファイル**
-   - `/etc/httpd/conf.d/jsontools.bon-soleil.com.conf` (HTTP設定)
-   - `/etc/httpd/conf.d/jsontools.bon-soleil.com-le-ssl.conf` (HTTPS設定)
+   - `/etc/httpd/conf.d/myapp.example.com.conf` (HTTP設定)
+   - `/etc/httpd/conf.d/myapp.example.com-le-ssl.conf` (HTTPS設定)
 
 3. **SSL証明書**
-   - `/etc/letsencrypt/live/jsontools.bon-soleil.com/`
+   - `/etc/letsencrypt/live/myapp.example.com/`
 
 ## 📊 影響範囲分析
 
 ### ✅ 影響なし（既存サービス）
-- **dev2.bon-soleil.com**: 既存設定に一切変更なし
+- **dev.example.com**: 既存設定に一切変更なし
 - **開発環境**: `/home/ec2-user/develop/` は読み取りのみ
 - **Apache基本設定**: メイン設定ファイルは未変更
 
@@ -40,7 +40,7 @@
 sudo systemctl status httpd
 
 # 既存サイトの動作確認
-curl -I https://dev2.bon-soleil.com/
+curl -I https://dev.example.com/
 
 # ディスク容量確認
 df -h
@@ -58,29 +58,29 @@ sudo cp -r /etc/httpd/conf.d/ /backup/apache/$(date +%Y%m%d_%H%M%S)/
 ### レベル1: 設定ファイルのみ削除
 ```bash
 # 新規作成した設定ファイルを削除
-sudo rm -f /etc/httpd/conf.d/jsontools.bon-soleil.com.conf
-sudo rm -f /etc/httpd/conf.d/jsontools.bon-soleil.com-le-ssl.conf
+sudo rm -f /etc/httpd/conf.d/myapp.example.com.conf
+sudo rm -f /etc/httpd/conf.d/myapp.example.com-le-ssl.conf
 
 # Apache reload
 sudo systemctl reload httpd
 
 # 動作確認
-curl -I https://dev2.bon-soleil.com/
+curl -I https://dev.example.com/
 ```
 
 ### レベル2: 完全巻き戻し
 ```bash
 # 1. 設定ファイル削除
-sudo rm -f /etc/httpd/conf.d/jsontools.bon-soleil.com*.conf
+sudo rm -f /etc/httpd/conf.d/myapp.example.com*.conf
 
 # 2. DocumentRoot削除
-sudo rm -f /var/www/html/jsontools.bon-soleil.com
+sudo rm -f /var/www/html/myapp.example.com
 
 # 3. production directory削除（オプション）
-sudo rm -rf /home/ec2-user/production/jsontools
+sudo rm -rf /home/ec2-user/production/myapp
 
 # 4. SSL証明書削除（オプション）
-sudo certbot delete --cert-name jsontools.bon-soleil.com
+sudo certbot delete --cert-name myapp.example.com
 
 # 5. Apache reload
 sudo systemctl reload httpd
@@ -95,7 +95,7 @@ sudo systemctl restart httpd
 sudo systemctl status httpd
 
 # 既存サイト動作確認
-curl -I https://dev2.bon-soleil.com/
+curl -I https://dev.example.com/
 ```
 
 ### レベル4: バックアップからの復元
@@ -136,7 +136,7 @@ sudo systemctl restart httpd
 sudo httpd -t
 
 # 既存サイト動作確認
-curl -I https://dev2.bon-soleil.com/
+curl -I https://dev.example.com/
 
 # Apache状態確認
 sudo systemctl status httpd

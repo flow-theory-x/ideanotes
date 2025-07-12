@@ -150,19 +150,19 @@ curl -I https://{DOMAIN_NAME}/
 openssl s_client -connect {DOMAIN_NAME}:443 -servername {DOMAIN_NAME} < /dev/null
 ```
 
-## 🛠️ jsontools用実行例
+## 🛠️ 実行例
 
-### 実際のコマンド（ドメイン: jsontools.bon-soleil.com）
+### 実際のコマンド（ドメイン: myapp.example.com）
 ```bash
 # 1. ディレクトリ準備
-sudo mkdir -p /var/www/html/jsontools.bon-soleil.com
-sudo chown apache:apache /var/www/html/jsontools.bon-soleil.com
+sudo mkdir -p /var/www/html/myapp.example.com
+sudo chown apache:apache /var/www/html/myapp.example.com
 
 # 2. HTTP設定
-sudo tee /etc/httpd/conf.d/jsontools.bon-soleil.com.conf > /dev/null << 'EOF'
+sudo tee /etc/httpd/conf.d/myapp.example.com.conf > /dev/null << 'EOF'
 <VirtualHost *:80>
-    ServerName jsontools.bon-soleil.com
-    DocumentRoot /var/www/html/jsontools.bon-soleil.com
+    ServerName myapp.example.com
+    DocumentRoot /var/www/html/myapp.example.com
     
     Alias /.well-known/acme-challenge /var/www/html/.well-known/acme-challenge
     <Directory "/var/www/html/.well-known/acme-challenge">
@@ -172,7 +172,7 @@ sudo tee /etc/httpd/conf.d/jsontools.bon-soleil.com.conf > /dev/null << 'EOF'
     </Directory>
     
     RewriteEngine on
-    RewriteCond %{SERVER_NAME} =jsontools.bon-soleil.com
+    RewriteCond %{SERVER_NAME} =myapp.example.com
     RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 </VirtualHost>
 EOF
@@ -181,7 +181,7 @@ EOF
 sudo systemctl reload httpd
 
 # 4. SSL証明書取得
-sudo certbot certonly --webroot -w /var/www/html -d jsontools.bon-soleil.com
+sudo certbot certonly --webroot -w /var/www/html -d myapp.example.com
 
 # 5. HTTPS設定（上記テンプレートで作成）
 
@@ -189,7 +189,7 @@ sudo certbot certonly --webroot -w /var/www/html -d jsontools.bon-soleil.com
 sudo systemctl reload httpd
 ```
 
-### jsontools配置
+### myapp配置
 
 #### Option A: 開発/本番分離 + シンボリックリンク（推奨）
 ```bash
@@ -198,32 +198,32 @@ sudo mkdir -p /home/ec2-user/production
 
 # 開発版から本番用にクローン（またはコピー）
 cd /home/ec2-user/production
-git clone /home/ec2-user/develop/jsontools jsontools
-# または: sudo cp -r /home/ec2-user/develop/jsontools /home/ec2-user/production/
+git clone /home/ec2-user/develop/myapp myapp
+# または: sudo cp -r /home/ec2-user/develop/myapp /home/ec2-user/production/
 
 # DocumentRootをシンボリックリンクに
-sudo rm -rf /var/www/html/jsontools.bon-soleil.com
-sudo ln -s /home/ec2-user/production/jsontools /var/www/html/jsontools.bon-soleil.com
+sudo rm -rf /var/www/html/myapp.example.com
+sudo ln -s /home/ec2-user/production/myapp /var/www/html/myapp.example.com
 
 # 権限調整
-sudo chown -R ec2-user:apache /home/ec2-user/production/jsontools
-sudo chmod -R 755 /home/ec2-user/production/jsontools
+sudo chown -R ec2-user:apache /home/ec2-user/production/myapp
+sudo chmod -R 755 /home/ec2-user/production/myapp
 ```
 
 #### 運用フロー
 ```
-開発: dev2.bon-soleil.com/develop/jsontools/     # 開発環境
+開発: dev.example.com/develop/myapp/     # 開発環境
        ↓ (安定化確認後)
-本番: jsontools.bon-soleil.com/                  # 本番環境
+本番: myapp.example.com/                  # 本番環境
 ```
 
 #### Option B: コピー方式
 ```bash
 # 開発版から本番へコピー
-sudo cp -r /home/ec2-user/develop/jsontools/* /var/www/html/jsontools.bon-soleil.com/
+sudo cp -r /home/ec2-user/develop/myapp/* /var/www/html/myapp.example.com/
 
 # 権限調整
-sudo chown -R apache:apache /var/www/html/jsontools.bon-soleil.com/
+sudo chown -R apache:apache /var/www/html/myapp.example.com/
 ```
 
 ## ⚠️ トラブルシューティング
