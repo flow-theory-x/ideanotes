@@ -1,0 +1,6 @@
+# Claude作業用ファイル
+CURRENT_STATUS.md
+
+# 一時ファイル
+*.tmp
+.DS_Store
