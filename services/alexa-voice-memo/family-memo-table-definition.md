@@ -78,19 +78,7 @@ interface UserItem {
 }
 ```
 
-### 3. Familiesテーブル（新規）
-
-```typescript
-interface FamilyItem {
-  familyId: string;    // 筆頭者のuserId (PK)
-  members: string[];   // メンバーのuserIdリスト
-  owner: string;       // 現在の筆頭者userId
-  createdAt: string;   // 作成日時
-  createdBy: string;   // 作成者userId
-}
-```
-
-### 4. InviteCodesテーブル（新規）
+### 3. InviteCodesテーブル（新規）
 
 ```typescript
 interface InviteCodeItem {
@@ -124,13 +112,12 @@ VALUES (userId, userId, 'amazon')
 ```mermaid
 erDiagram
     Users ||--o{ Memos : creates
-    Families ||--o{ Users : has
-    Families ||--o{ Memos : contains
-    InviteCodes ||--|| Families : invites_to
+    Users ||--o{ Users : "belongs to family of"
+    InviteCodes ||--|| Users : "invites to family"
 
     Users {
         string userId PK
-        string familyId FK
+        string familyId "筆頭者のuserId"
         string name
         string email
         string provider
@@ -138,18 +125,10 @@ erDiagram
         string lastLoginAt
     }
 
-    Families {
-        string familyId PK
-        string[] members
-        string owner
-        string createdAt
-        string createdBy
-    }
-
     Memos {
         string userId PK
         string memoId SK
-        string familyId FK
+        string familyId "筆頭者のuserId"
         string text
         string timestamp
         string deleted
@@ -164,7 +143,7 @@ erDiagram
 
     InviteCodes {
         string code PK
-        string familyId FK
+        string familyId "招待先の筆頭者userId"
         string type
         string createdAt
         string expiresAt
@@ -188,15 +167,6 @@ memosTable.addGlobalSecondaryIndex({
 const usersTable = new Table(this, 'UsersTable', {
   tableName: `${projectName}-${environment}-users`,
   partitionKey: { name: 'userId', type: AttributeType.STRING },
-  billingMode: BillingMode.PAY_PER_REQUEST,
-  encryption: TableEncryption.AWS_MANAGED,
-  removalPolicy: RemovalPolicy.DESTROY,
-});
-
-// Familiesテーブル新規作成
-const familiesTable = new Table(this, 'FamiliesTable', {
-  tableName: `${projectName}-${environment}-families`,
-  partitionKey: { name: 'familyId', type: AttributeType.STRING },
   billingMode: BillingMode.PAY_PER_REQUEST,
   encryption: TableEncryption.AWS_MANAGED,
   removalPolicy: RemovalPolicy.DESTROY,

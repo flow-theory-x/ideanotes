@@ -36,12 +36,10 @@ interface User {
   createdAt: Date;
 }
 
-interface Family {
-  familyId: string;      // 筆頭者のuserId
-  members: string[];     // userIdのリスト
-  owner: string;         // 現在の筆頭者userId
-  createdAt: Date;
-}
+// Familiesテーブルは不要！
+// - メンバー一覧: UsersをfamilyIdでクエリ
+// - 筆頭者: familyId = userIdの人
+// - 買い物メモなので大量UPDATEの心配なし
 
 interface Memo {
   memoId: string;        // UUID
@@ -113,22 +111,20 @@ WHERE userId = 'hanako@gmail.com';
 -- 過去のメモは太郎さんの家族に残る
 ```
 
-#### 筆頭者の離婚（移譲＆退出）
+#### 筆頭者の離婚（全員のfamilyId更新）
 ```sql
 -- 太郎さんが花子さんに筆頭者を移譲
-UPDATE family SET owner = 'hanako@gmail.com', 
-                  familyId = 'hanako@gmail.com'
-WHERE familyId = 'taro@gmail.com';
-
 UPDATE users SET familyId = 'hanako@gmail.com' 
 WHERE familyId = 'taro@gmail.com';
 
 UPDATE memos SET familyId = 'hanako@gmail.com' 
 WHERE familyId = 'taro@gmail.com';
 
--- 太郎さんが退出
+-- 太郎さんが退出して独立
 UPDATE users SET familyId = 'taro@gmail.com' 
 WHERE userId = 'taro@gmail.com';
+
+-- 買い物メモなので量は少ない！問題なし
 ```
 
 ## 🎯 機能仕様

@@ -13,8 +13,8 @@
 ```
 [ ] Memosテーブルに family-timestamp-index GSI追加
 [ ] Usersテーブル作成
-[ ] Familiesテーブル作成  
 [ ] InviteCodesテーブル作成（TTL設定含む）
+[ ] ※Familiesテーブルは不要（買い物メモなので）
 ```
 
 ### Task 1.2: 既存データ移行
