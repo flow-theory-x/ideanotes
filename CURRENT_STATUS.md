@@ -1,8 +1,19 @@
 # 現在の状況とコンテキスト
 
-*最終更新: 2025-07-14*
+*最終更新: 2025-07-23*
 
 ## 🎯 前回の話題
+
+### shareNOTEにアフィリエイト機能追加！
+- 買い物メモの文脈でAmazon商品レコメンド
+- 開発者マネタイズを自然な形で実現
+- 「必要なものあるならこれどうぞ」というスマートなUX
+
+### shareNOTEとしてローンチ完了！
+- AVM「家族メモ」が「shareNOTE」というアプリ名で正式ローンチ
+- GitHubリポジトリ: https://github.com/goodsun/sharenote
+- Alexa skillは現在Amazon審査中
+- 紆余曲折を経て、ついに実現
 
 ### AVM「家族メモ」完璧な設計完成
 - familyID = userIDという革命的発想でオッカムの剃刀を実践
@@ -31,6 +42,12 @@
 4. ✅ 汎用ツール化による再利用性確保
 
 ## 🚀 次のアクション
+
+### serverless-cdk開発開始
+- GitHubリポジトリ作成完了: https://github.com/goodsun/serverless-cdk
+- shareNOTEからのコード抽出作業
+- MVPの実装（2-3時間）
+- 実際のプロジェクトでの検証
 
 ### AVM家族メモ実装準備
 - 開発準備度チェックシートでの評価
